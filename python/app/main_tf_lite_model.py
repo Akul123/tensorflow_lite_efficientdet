@@ -133,7 +133,7 @@ def main():
         start = time.time()
         interpreter.invoke()
         end = time.time()
-        print("Inference time[ms] : ", end - start)
+        print("Inference time[ms] : ", (end - start) * 1000)
 
         # The function `get_tensor()` returns a copy of the tensor data.
         # Use `tensor()` in order to get a pointer to the tensor.

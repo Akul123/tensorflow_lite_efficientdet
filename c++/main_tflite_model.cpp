@@ -30,7 +30,7 @@ using Efficientdet::ImageFile;
 using Efficientdet::Params;
 
 //read model and images path from params.json
-Params readParams(std::string json){
+Params readParams(const std::string &json){
     std::ifstream paramsJSON(json, std::ifstream::binary);
     Json::Value params;
     paramsJSON >> params;
@@ -60,7 +60,7 @@ Params readParams(std::string json){
     return result;
 }
 
-void displayImage(cv::Mat image){
+void displayImage(const cv::Mat &image){
     cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Display window", image );
     cv::waitKey(0);
@@ -112,7 +112,7 @@ void deleteAllImagesFromDir(const std::string& directoryName){
     return;
 }
 
-cv::Mat resizeImage(cv::Mat img, size_t input_height, size_t input_width){
+cv::Mat resizeImage(const cv::Mat &img, size_t input_height, size_t input_width){
     int image_width = img.size().width; //
     int image_height = img.size().height; //
 
@@ -170,8 +170,8 @@ void printOutputDetails(const TfLiteTensor* boxes, const TfLiteTensor* classes, 
 void drawRectangleOverObjects(cv::Mat& image, const float* const boxesData, const float* const scoresData, const float* const countData, const float* const classesData, const double scoreThreshold){
     for(size_t i = 0; i < *countData; ++i){
         if(scoresData[i] > scoreThreshold){
-            cv::Point p1 {static_cast<int>(boxesData[i * 4 + 1] * 640), static_cast<int>(boxesData[i * 4] * 640)};
-            cv::Point p2 {static_cast<int>(boxesData[i * 4 + 3] * 640), static_cast<int>(boxesData[i * 4 + 2] * 640)};
+            cv::Point p1 {static_cast<int>(boxesData[i * sizeof(float) + 1] * 640), static_cast<int>(boxesData[i * sizeof(float)] * 640)};
+            cv::Point p2 {static_cast<int>(boxesData[i * sizeof(float) + 3] * 640), static_cast<int>(boxesData[i * sizeof(float) + 2] * 640)};
             cv::Scalar color{255, 255, 255};
             int thickness = 1;
 
@@ -249,7 +249,7 @@ int main(int argc, char const *argv[])
         // this is the input for the model
         cv::Mat resizedImage = resizeImage(image.image, input_height, input_width);
         // displayImage(resizedImage);
-         // Fill `input`.
+        // Fill `input`.
         memcpy(interpreter->typed_input_tensor<unsigned char>(0),
                 resizedImage.data,
                 resizedImage.total() * resizedImage.elemSize());
@@ -284,6 +284,8 @@ int main(int argc, char const *argv[])
         std::string savedFileName = params.imageSavePath + image.name + "_processed.jpg";
         saveImage(resizedImage, savedFileName);
     }
+
+    delete delegate;
 
     return 0;
 }
