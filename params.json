@@ -1,0 +1,6 @@
+{
+    "model_path": "../../model/2.tflite",
+    "images_path": "../../images",
+    "image_save_path" : "../../saved_images/",
+    "score_threshold": 0.3
+}
