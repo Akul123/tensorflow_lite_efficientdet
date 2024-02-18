@@ -21,4 +21,5 @@ Inference times c++:
 
 ...and python:
 
-![image](https://github.com/Akul123/tensorflow_lite_efficientdet/assets/33400468/95fe9900-8f40-44e5-a4f4-5b1b3cd8f03b)
+![image](https://github.com/Akul123/tensorflow_lite_efficientdet/assets/33400468/8823dcb1-5fcd-4915-b10e-9d5b5cbf862a)
+
